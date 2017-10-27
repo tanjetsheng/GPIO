@@ -20,5 +20,7 @@ extern uint32_t *rccAhb1Rst ;
 extern uint32_t *rccAhb1REn ;
 
 void enableGpioG(void);
+void enableGpioB(void);
+void enableGpioA(void);
 
 #endif /* RCC_H_ */
