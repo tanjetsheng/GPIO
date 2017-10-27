@@ -12,11 +12,25 @@
 
 
 #define GPIOG_BASE_ADDR 	0x40021800
-#define GPIO_MODE_OFF 		0x0
-#define GPIO_OTYPE_OFF 		0x4
-#define GPIO_OSPEED_OFF 	0x8
-#define GPIO_PUPD_OFF 		0xC
-#define GPIO_OD_OFF 		0x14
+#define GpioG		((GpioReg *)(GPIOG_BASE_ADDR))
+
+typedef struct GpioReg GpioReg;
+struct GpioReg{
+	volatile uint32_t mode;			//0h
+	volatile uint32_t outType;		//4h
+	volatile uint32_t outSpeed;		//8h
+	volatile uint32_t pullType;  	//ch
+	volatile uint32_t inData;		//10h
+	volatile uint32_t outData;		//14h
+	volatile uint32_t bitData;		//18h
+	volatile uint32_t lock;			//1ch
+	volatile uint32_t altFuncLow; 	//20h
+	volatile uint32_t altFuncHigh; 	//24h
+
+
+};
+
+
 
 
 //PIN MODE
