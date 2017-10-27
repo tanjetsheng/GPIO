@@ -1,0 +1,3 @@
+#for SW4sTM32
+Debug/*
+!Degub/*.mk
