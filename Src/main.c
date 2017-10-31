@@ -38,8 +38,12 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "stm32f4xx_hal.h"
+#include <stdio.h>
 #include "Gpio.h"
 #include "Rcc.h"
+#include "Rng.h"
+#include "Nvic.h"
+
 
 /* USER CODE BEGIN Includes */
 #define blueButtonPin 0
@@ -58,6 +62,7 @@
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
+extern void initialise_monitor_handles(void);
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
@@ -70,9 +75,9 @@ static void MX_GPIO_Init(void);
 
 int main(void)
 {
-
+	  int i = 0;
   /* USER CODE BEGIN 1 */
-
+	initialise_monitor_handles();
   /* USER CODE END 1 */
 
   /* MCU Configuration----------------------------------------------------------*/
@@ -95,6 +100,13 @@ int main(void)
   MX_GPIO_Init();
 
   /* USER CODE BEGIN 2 */
+  printf("helloWorld\n");
+  nvicEnableIrq(80);
+  nvicSetPriority(80,4);
+  enableRng();
+  getRandomNumberByInterrupt();
+
+
   enableGpioA();
   enableGpioG();
   gpioConfig(GpioA,blueButtonPin, GPIO_MODE_IN ,0,GPIO_NO_PULL,0);
@@ -108,13 +120,19 @@ int main(void)
   while (1)
   {
   /* USER CODE END WHILE */
+
+//	  int num = getRandomNumber();
+	//  printf("(%d) 0x%x\n",i++,num);
+
+
 	  volatile int blueButtonState;
-	  gpioWrite(GpioG,redLedPin,0);
-	  gpioWrite(GpioG,greenLedPin,1);
+	  SET_PIN(GpioG,redLedPin);
 	  HAL_Delay(200);
-	  gpioWrite(GpioG,redLedPin,1);
-	  gpioWrite(GpioG,greenLedPin,0);
+	  RESET_PIN(GpioG,redLedPin);
 	  HAL_Delay(200);
+
+	  gpioLock(GpioG,redLedPin);
+	  gpioConfig(GpioG,redLedPin, GPIO_MODE_IN , GPIO_PUSH_PULL,GPIO_NO_PULL,GPIO_LOW_SPEED);
 
 	  blueButtonState = gpioRead(GpioA,blueButtonPin);
 
@@ -204,6 +222,9 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+void HASH_RNG_IRQHandler(void){
+	volatile int rand = Rng->DR;
+}
 
 /* USER CODE END 4 */
 

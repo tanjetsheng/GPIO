@@ -8,6 +8,10 @@
 
 #include "Gpio.h"
 
+
+
+
+
 void gpioConfig(GpioReg *Gpio,int pin,int mode, int outdriveType,int pullType,int speed){
 	Gpio->mode &= ~(3 <<(pin * 2));					//clear pin mode to 0
 	Gpio->mode |= mode <<(pin * 2);					//set pin mode
@@ -60,4 +64,16 @@ void gpioGWrite(int pin,int state){
 	}else{
 	GpioG->outData &= ~(1<< pin);
 	}
+}
+
+void gpioLock(GpioReg *Gpio,int pin){
+
+	int pattern;
+
+	Gpio->lock = (1<<16)|(1<<pin);
+	Gpio->lock = (0<<16)|(1<<pin);
+	Gpio->lock = (1<<16)|(1<<pin);
+
+	pattern = Gpio->lock;
+	pattern = Gpio->lock;
 }
