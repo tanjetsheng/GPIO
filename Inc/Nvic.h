@@ -17,7 +17,7 @@ typedef struct NvicReg NvicReg;
 struct NvicReg{
 	volatile uint32_t ISER[3];				//interrupt set enable   0h
 	volatile uint32_t reserve1[29];
-	volatile uint32_t ICE[3];				//interrupt clear enable  80h
+	volatile uint32_t ICER[3];				//interrupt clear enable  80h
 	volatile uint32_t reserve2[29];
 	volatile uint32_t ISPR[3];				//interrupt set pending 	100h
 	volatile uint32_t reserve3[29];

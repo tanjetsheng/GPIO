@@ -58,6 +58,16 @@ void gpioGConfig(int pin,int mode, int outdriveType,int pullType,int speed){
 	GpioG->outType |= outdriveType <<pin ;					//set pin drive type
 }
 
+void gpioConfigAltFuncNum(GpioReg *Gpio,int pin,int func){
+	if(pin>7){
+		Gpio->altFuncHigh &= ~(0xf << (pin*4));
+		Gpio->altFuncHigh |= (func << (pin*4));
+	}else{
+		Gpio->altFuncLow &= ~(0xf << (pin*4));
+		Gpio->altFuncLow |= (func << (pin*4));
+	}
+}
+
 void gpioGWrite(int pin,int state){
 	if(state ==1){
 	GpioG->outData |= 1 << pin;

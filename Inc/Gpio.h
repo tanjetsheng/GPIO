@@ -29,6 +29,23 @@
 #define GpioH		((GpioReg *)(GPIOH_BASE_ADDR))
 #define GpioI		((GpioReg *)(GPIOI_BASE_ADDR))
 
+#define ALT_FUNC0	0
+#define ALT_FUNC1	1
+#define ALT_FUNC2	2
+#define ALT_FUNC3	3
+#define ALT_FUNC4	4
+#define ALT_FUNC5	5
+#define ALT_FUNC6	6
+#define ALT_FUNC7	7
+#define ALT_FUNC8	8
+#define ALT_FUNC9	9
+#define ALT_FUNCA	a
+#define ALT_FUNCB	b
+#define ALT_FUNCC	c
+#define ALT_FUNCD	d
+#define ALT_FUNCE	e
+#define ALT_FUNCF	f
+
 typedef struct GpioReg GpioReg;
 struct GpioReg{
 	volatile uint32_t mode;			//0h
@@ -77,6 +94,9 @@ extern uint32_t *gpioGOSPEED;
 extern uint32_t *gpioGPupd;
 extern uint32_t *gpioGOType;
 extern uint32_t *gpioGOD;
+
+void gpioConfigAltFuncNum(GpioReg *Gpio,int pin,int func);
+
 
 void gpioConfig(GpioReg *Gpio,int pin,int mode, int outdriveType,int pullType,int speed);
 void gpioWrite(GpioReg *Gpio,int pin,int state);
