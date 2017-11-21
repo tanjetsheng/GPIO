@@ -45,7 +45,7 @@
 #include "Nvic.h"
 #include "sysTick.h"
 #include "ExtIntr.h"
-
+#include "Timer.h"
 
 /* USER CODE BEGIN Includes */
 #define blueButtonPin 0
@@ -141,7 +141,7 @@ int main(void)
 
   sysTickDisable();
   enableRng();
-
+  initTimer8();
 
 
   //enable GPIO 0
@@ -176,9 +176,14 @@ int main(void)
 	  RESET_PIN(GpioG,redLedPin);
 	  while(!sysTickHasExpired());
 */
-	  SET_PIN(GpioG,redLedPin);
-	  __WFI();
+
 	  RESET_PIN(GpioG,redLedPin);
+	  SET_PIN(GpioG,greenLedPin);
+	  wait500ms();
+	  RESET_PIN(GpioG,greenLedPin);
+	  SET_PIN(GpioG,redLedPin);
+	  wait500ms();
+
 /*
 	  volatile int blueButtonState;
 	  SET_PIN(GpioG,redLedPin);
@@ -301,6 +306,12 @@ void HASH_RNG_IRQHandler(void){
 	volatile int rand = Rng->DR;
 }
 
+void wait500ms(){
+	while(!(timer8->SR & 1)){
+
+	}
+	timer8->SR &=  0;
+}
 /* USER CODE END 4 */
 
 /**

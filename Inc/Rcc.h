@@ -50,6 +50,11 @@ struct RccReg{
 	volatile uint32_t PLLI2SCFGR; 	//84h
 
 };
+
+
+#define enableTimer8()  \
+		Rcc->APB2RSTR &= ~(1<<1);		\
+		Rcc->APB2ENR |= 1<<1;
 //export variable to other module
 extern uint32_t *rccAhb1Rst ;
 extern uint32_t *rccAhb1REn ;
