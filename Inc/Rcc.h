@@ -69,11 +69,15 @@ extern uint32_t *rccAhb1REn ;
 #define MCO_HSE_SRC		2
 #define MCO_PLL_SRC		3
 
-
+#define I2c1_dev   		21
+#define I2c2_dev 		22
+#define I2c3_dev 		23
 
 void enableGpioG(void);
 void enableGpioB(void);
 void enableGpioA(void);
+void enableI2c1(void);
+void enableI2c2(void);
 
 #define rccSelectMco1Src(x)									\
 									Rcc->CFGR &= ~(3 << 21);	\

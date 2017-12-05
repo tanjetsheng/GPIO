@@ -35,8 +35,6 @@ struct TimerReg{
 	volatile uint32_t BDTR;					//44h
 	volatile uint32_t DCR;					//48h
 	volatile uint32_t DMAR;					//4ch
-
-
 };
 
 void initTimer8(void);

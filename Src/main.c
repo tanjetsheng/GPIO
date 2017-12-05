@@ -46,6 +46,8 @@
 #include "sysTick.h"
 #include "ExtIntr.h"
 #include "Timer.h"
+#include "I2c.h"
+#include "Flash.h"
 
 /* USER CODE BEGIN Includes */
 #define blueButtonPin 0
@@ -123,6 +125,8 @@ int main(void)
    rccSelectMco1Src(MCO_HSE_SRC);
    rccSetMco1Prescaler(MCO_DIV_5);
 
+   gpioConfig(GpioB,6, GPIO_MODE_AF , GPIO_PUSH_PULL,GPIO_NO_PULL,GPIO_LOW_SPEED);
+
  // nvicEnableIrq(80);
  // nvicSetPriority(80,4);
 
@@ -136,25 +140,40 @@ int main(void)
  // sysTickIntrEnable();
 
 
-   nvicEnableIrq(6);
-   nvicSetPriority(6,4);
+ //  nvicEnableIrq(6);
+ //  nvicSetPriority(6,4);
 
-  sysTickDisable();
-  enableRng();
-  initTimer8();
+ // sysTickDisable();
+ // enableRng();
+ // initTimer8();
 
+ // InitI2c();
 
   //enable GPIO 0
  // risingDisable(0);
  // fallingDisable(0);
-  interMaskEnable(0);
-  risingEnable(0);
+ // interMaskEnable(0);
+ // risingEnable(0);
 
  // eventMaskEnable(0);
 
+   //flashEraseSector(13);
+  //flashEnableProgramming(FLASH_WORD_SIZE);
+  //flashWriteMessage("hello world",(char *)0x08084000);
 
-
-
+ // Flash->SR |= FLASH_PGSERR;
+   flashEnableProgramming(FLASH_BYTE_SIZE);
+   flashWriteMessage("hello world",(char *)0x08100000);
+   flashEraseSector(12);
+  if(flashEraseSector(13)==1){
+//  flashEnableProgramming(FLASH_BYTE_SIZE);
+  flashWriteMessage("hello world",(char *)0x08084000);
+  flashDisable();
+  while(1);
+  }
+  else{
+	  while(1);
+  }
 
 
 
@@ -176,14 +195,14 @@ int main(void)
 	  RESET_PIN(GpioG,redLedPin);
 	  while(!sysTickHasExpired());
 */
-
+/*
 	  RESET_PIN(GpioG,redLedPin);
 	  SET_PIN(GpioG,greenLedPin);
 	  wait500ms();
 	  RESET_PIN(GpioG,greenLedPin);
 	  SET_PIN(GpioG,redLedPin);
 	  wait500ms();
-
+*/
 /*
 	  volatile int blueButtonState;
 	  SET_PIN(GpioG,redLedPin);

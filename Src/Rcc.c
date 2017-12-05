@@ -39,3 +39,10 @@ void enableRng(void){
 	//start clock
 	Rcc->AHB2ENR |= 1<<6;
 }
+
+void enableI2c(int num){
+	Rcc->APB1RSTR &= ~(1<<num);
+	Rcc->APB1ENR |= 1<<num;
+}
+
+
