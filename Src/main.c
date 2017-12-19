@@ -48,6 +48,8 @@
 #include "Timer.h"
 #include "I2c.h"
 #include "Flash.h"
+#include "Usart.h"
+#include "Dma.h"
 
 /* USER CODE BEGIN Includes */
 #define blueButtonPin 0
@@ -79,7 +81,8 @@ extern void initialise_monitor_handles(void);
 
 int main(void)
 {
-	  int i = 0;
+	  volatile int i = 0;
+	  char *Data = (char*)malloc(sizeof(char) * 256);
   /* USER CODE BEGIN 1 */
 	initialise_monitor_handles();
   /* USER CODE END 1 */
@@ -104,6 +107,13 @@ int main(void)
   MX_GPIO_Init();
 
   /* USER CODE BEGIN 2 */
+
+  //dmaTransmitData("okas");
+ // i = dmaStreamTransferComplete(dma2 ,3);
+  //i = dmaStreamTransferComplete(dma2 ,4);
+  //i = dmaStreamTransferComplete(dma2 ,5);
+  //i = dmaStreamTransferComplete(dma2 ,7);
+
 /*
   //enable i2c1 event interrupt
   nvicEnableIrq(31);
@@ -112,20 +122,21 @@ int main(void)
   nvicDisableIrq(31);
 */
 
-  printf("helloWorld\n");
+ // printf("helloWorld\n");
   enableGpioA();
-   enableGpioG();
+  enableGpioG();
+
 
   // gpioConfig(GpioA,blueButtonPin, GPIO_MODE_IN ,0,GPIO_NO_PULL,0);
    gpioConfig(GpioG,redLedPin, GPIO_MODE_OUT , GPIO_PUSH_PULL,GPIO_NO_PULL,GPIO_LOW_SPEED);
-   gpioConfig(GpioG,greenLedPin, GPIO_MODE_OUT , GPIO_PUSH_PULL,GPIO_PULL_DOWN,GPIO_VHIGH_SPEED);
-   gpioConfig(GpioA,8, GPIO_MODE_AF , GPIO_PUSH_PULL,GPIO_NO_PULL,GPIO_VHIGH_SPEED);
+ //  gpioConfig(GpioG,greenLedPin, GPIO_MODE_OUT , GPIO_PUSH_PULL,GPIO_PULL_DOWN,GPIO_VHIGH_SPEED);
+ //  gpioConfig(GpioA,8, GPIO_MODE_AF , GPIO_PUSH_PULL,GPIO_NO_PULL,GPIO_VHIGH_SPEED);
 
-   gpioConfigAltFuncNum(GpioA,8,ALT_FUNC0);
-   rccSelectMco1Src(MCO_HSE_SRC);
-   rccSetMco1Prescaler(MCO_DIV_5);
+ //  gpioConfigAltFuncNum(GpioA,8,ALT_FUNC0);
+  // rccSelectMco1Src(MCO_HSE_SRC);
+  // rccSetMco1Prescaler(MCO_DIV_5);
 
-   gpioConfig(GpioB,6, GPIO_MODE_AF , GPIO_PUSH_PULL,GPIO_NO_PULL,GPIO_LOW_SPEED);
+  // gpioConfig(GpioB,6, GPIO_MODE_AF , GPIO_PUSH_PULL,GPIO_NO_PULL,GPIO_LOW_SPEED);
 
  // nvicEnableIrq(80);
  // nvicSetPriority(80,4);
@@ -160,9 +171,26 @@ int main(void)
    //flashEraseSector(13);
   //flashEnableProgramming(FLASH_WORD_SIZE);
   //flashWriteMessage("hello world",(char *)0x08084000);
+   enableDma(DMA2_DEV);
+    dmaIntiForUsart1();
+
+   gpioConfig(GpioA,9, GPIO_MODE_AF , GPIO_PUSH_PULL,GPIO_NO_PULL,GPIO_VHIGH_SPEED);
+   gpioConfigAltFuncNum(GpioA,9,ALT_FUNC7);
+   gpioConfig(GpioA,10, GPIO_MODE_AF , GPIO_PUSH_PULL,GPIO_NO_PULL,GPIO_VHIGH_SPEED);
+   gpioConfigAltFuncNum(GpioA,10,ALT_FUNC7);
+
+
+
+
+   enableUsart();
+   initUsart();
+   configBaudRate();
+       EnableTrans();
+       DisableReceiv();
+
 
  // Flash->SR |= FLASH_PGSERR;
-   flashEnableProgramming(FLASH_BYTE_SIZE);
+ /*  flashEnableProgramming(FLASH_BYTE_SIZE);
    flashWriteMessage("hello world",(char *)0x08100000);
    flashEraseSector(12);
   if(flashEraseSector(13)==1){
@@ -175,7 +203,7 @@ int main(void)
 	  while(1);
   }
 
-
+*/
 
 
   /* USER CODE END 2 */
@@ -185,6 +213,35 @@ int main(void)
   while (1)
   {
   /* USER CODE END WHILE */
+
+/*	  ReceiveTillEnter(&Data);
+	  if(strcmp("turn on", &Data) == 0){
+		  SET_PIN(GpioG,redLedPin);
+	  	  	  }
+
+	  else if(strcmp("turn off", &Data) == 0){
+		  RESET_PIN(GpioG,redLedPin);
+	  	  	  }
+	  else{
+	  }
+*/
+	// writeData("h");
+	 // writeData("8");
+
+	 /* writeData("h");
+	  writeData("e");
+	  writeData("l");
+	  writeData("l");
+	  writeData("o");
+	  writeData(" ");
+	  writeData("w");
+	  writeData("o");
+	  writeData("r");
+	  writeData("l");
+	  writeData("d");
+	  writeData("\n");*/
+	 // HAL_Delay(1000);
+
 
 //	  int num = getRandomNumber();
 //  printf("(%d) 0x%x\n",i++,num);

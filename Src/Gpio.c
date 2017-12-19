@@ -60,8 +60,8 @@ void gpioGConfig(int pin,int mode, int outdriveType,int pullType,int speed){
 
 void gpioConfigAltFuncNum(GpioReg *Gpio,int pin,int func){
 	if(pin>7){
-		Gpio->altFuncHigh &= ~(0xf << (pin*4));
-		Gpio->altFuncHigh |= (func << (pin*4));
+		Gpio->altFuncHigh &= ~(0xf << ((pin-8)*4));
+		Gpio->altFuncHigh |= (func << ((pin-8)*4));
 	}else{
 		Gpio->altFuncLow &= ~(0xf << (pin*4));
 		Gpio->altFuncLow |= (func << (pin*4));

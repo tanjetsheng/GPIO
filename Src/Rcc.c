@@ -45,4 +45,15 @@ void enableI2c(int num){
 	Rcc->APB1ENR |= 1<<num;
 }
 
+void enableUsart(void){
+	Rcc->APB2RSTR &= ~(1<<4);
+	Rcc->APB2ENR |= 1<<4;
+}
+
+
+
+void enableDma(int dmaNumber){
+	Rcc->AHB1RSTR &= ~(1<<21 + dmaNumber);
+	Rcc->AHB1ENR |= 1<<21 + dmaNumber;
+}
 

@@ -1,0 +1,88 @@
+/*
+ * Dma.h
+ *
+ *  Created on: Dec 19, 2017
+ *      Author: user
+ */
+
+#ifndef DMA_H_
+#define DMA_H_
+
+#include <stdint.h>
+#include "Usart.h"
+
+#define DMA1_BASE_ADDR 	0x40026000
+#define DMA2_BASE_ADDR 	0x40026400
+#define dma1      ((DmaReg *)(DMA1_BASE_ADDR))
+#define dma2      ((DmaReg *)(DMA2_BASE_ADDR))
+
+
+//interrupt status register(xISR)
+#define DMA_FEIF		1
+#define DMA_DMEIF		(1<<2)
+#define DMA_TEIF		(1<<3)
+#define DMA_HTIF		(1<<4)
+#define DMA_TCIF		(1<<5)
+
+
+#define ENABLE_STREAM 			1
+#define DMA_FLOWCONTROL		~(1<<5)
+
+#define PERI_TO_MEM			0
+#define MEM_TO_PERI			1
+#define MEM_TO_MEM			2
+
+#define ONE_BYTE		0
+#define HALF_WORD		1
+#define FULL_WORD		2
+
+#define LOW_PRIO		0
+#define MED_PRIO		1
+#define HIGH_PRIO		2
+#define VHIGH_PRIO		3
+
+#define SINGLE_TRANS		0
+#define INC4				1
+#define INC8				2
+#define INC16				3
+
+#define QUAD_FIFO			0
+#define HALF_FIFO			1
+#define THREE_FIFO			2
+#define FULL_FIFO			3
+
+
+
+typedef struct DmaReg DmaReg;
+typedef struct DmaStreamReg DmaStreamReg;
+
+struct DmaStreamReg{
+	volatile uint32_t CR;
+	volatile uint32_t NDTR;
+	volatile uint32_t PAR;
+	volatile uint32_t M0AR;
+	volatile uint32_t M1AR;
+	volatile uint32_t FCR;
+};
+
+
+struct DmaReg{
+	volatile uint32_t LISR;
+	volatile uint32_t HISR;
+	volatile uint32_t LIFCR;
+	volatile uint32_t HIFCR;
+	DmaStreamReg	S[8];
+};
+
+
+
+#define dmaStreamTransferComplete(d,s) 			dmaStreamCheckFlag(d,s,DMA_TCIF)
+#define dmaStreamHalfTransferComplete(d,s) 		dmaStreamCheckFlag(d,s,DMA_HTIF)
+#define dmaStreamIsTransferError(d,s) 			dmaStreamCheckFlag(d,s,DMA_TEIF)
+#define dmaStreamIsDirectModeError(d,s) 		dmaStreamCheckFlag(d,s,DMA_MDEIF)
+#define dmaStreamIsFifoError(d,s) 				dmaStreamCheckFlag(d,s,DMA_FEIF)
+
+
+void dmaIntiForUsart1();
+void dmaTransmitData();
+#endif /* DMA_H_ */

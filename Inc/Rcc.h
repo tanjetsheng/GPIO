@@ -9,6 +9,7 @@
 #define RCC_H_
 
 #include <stdint.h>
+#include "Common.h"
 
 #define RCC_BASE_ADDR    0x40023800
 #define RCC_AHB1RST_OFF   0x10
@@ -73,11 +74,15 @@ extern uint32_t *rccAhb1REn ;
 #define I2c2_dev 		22
 #define I2c3_dev 		23
 
+#define DMA1_DEV		0
+#define DMA2_DEV		1
+
 void enableGpioG(void);
 void enableGpioB(void);
 void enableGpioA(void);
 void enableI2c1(void);
 void enableI2c2(void);
+void enableUsart(void);
 
 #define rccSelectMco1Src(x)									\
 									Rcc->CFGR &= ~(3 << 21);	\
