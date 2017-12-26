@@ -86,5 +86,4 @@ struct DmaReg{
 
 void dmaIntiForUsart1();
 void dmaTransmitData();
-void dmaIntiForTimer8();
 #endif /* DMA_H_ */

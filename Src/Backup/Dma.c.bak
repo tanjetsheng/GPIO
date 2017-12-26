@@ -7,7 +7,6 @@
 
 #include "Dma.h"
 #include "Common.h"
-#include "Timer.h"
 
 //DMA2 stream2.ch4=USART1_RX
 //DMA2 stream7.ch4=USART1_TX
@@ -87,20 +86,5 @@ void dmaTransmitData(char *value){
 }
 
 void dmaSetAddressAndSize(uint32_t memoryAddr,uint32_t peripheralAddr,uint32_t size){
-	dma2->S[2].NDTR = size;
-	dma2->S[2].PAR =peripheralAddr;
-	dma2->S[2].M0AR =memoryAddr;
-}
-
-void dmaIntiForTimer8(){
-//	uint16_t	timerWaveForm[]= {BIT_0,BIT_PERIOD,BIT_1,BIT_PERIOD,BIT_PERIOD+2}
-	dma2->S[2].CR &= ~ENABLE_STREAM ;
-	dma2->S[2].CR = (MEM_TO_PERI<<6) | (HALF_WORD<<11) | (HALF_WORD<<13) | (VHIGH_PRIO << 16) |(INC4 << 23) |(1<<10);
-
-	//dma2->S[2].PAR = &(timer8->CCR1);
-	dma2->S[2].FCR |= HALF_FIFO;
-
-	dma2->S[2].CR |= ENABLE_STREAM ;
 
 }
-

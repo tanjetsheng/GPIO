@@ -8,8 +8,6 @@
 #include "Rcc.h"
 #include "Timer.h"
 #include "Gpio.h"
-#include "stdint.h"
-#include "dma.h"
 
 
 void initTimer8(void){
@@ -22,16 +20,6 @@ void initTimer8(void){
 	timer8->CR1 &= UPCOUNTER;
 }
 
-void initTimer8_OC(void){
-	//enable
-	enableTimer8();
-	timer8->ARR  = 125;
-	timer8->PSC = 1;
-	timer8->CCR1 = 12;
-	timer8->SMCR &= 7 ;
-	timer8->CR1 |= COUNTER_ENABLE;
-	timer8->CR1 &= UPCOUNTER;
-}
 void SetTimer8C1ToOC(){
 	//gpioConfig(GpioG,,int mode, int outdriveType,int pullType,int speed);
 
@@ -41,7 +29,11 @@ void SetTimer8C1ToOC(){
 
 }
 
-
+/*void initTimer8C1(){
+	gpioConfig(GpioC,1, GPIO_MODE_AF , GPIO_PUSH_PULL,GPIO_NO_PULL,GPIO_VHIGH_SPEED);
+	gpioConfigAltFuncNum(GpioA,1,ALT_FUNC7);
+}
+*/
 
 void forceOutCompareChannel1High(){
 	timer8->CCMR1 |= FORCE_HIGH;
@@ -53,36 +45,6 @@ void forceOutCompareChannel1Low(){
 	timer8->CCMR1 |= FORCE_LOW;
 	timer8->CCMR1 &= ~(FORCE_LOW);
 }
-
-void toggleOutCompareChannel1WithForce(){
-	forceOutCompareChannel1High();
-	forceOutCompareChannel1Low();
-}
-
-void togglemode(){
-	timer8->CCMR1 |= TOGGLE;
-
-}
-
-void initTimer8forDma(){
-	forceOutCompareChannel1High();
-		timer8->CCER |= 1;
-		togglemode();
-		timer8->DIER |=(1<<9);
-		timer8->CCR1 = (timer8->ARR);
-		timer8->CNT = (timer8->ARR) - 1;
-}
-
-void sendBitPattern(uint8_t data){
-
-
-
-
-}
-
-
-
-
 /*void initTimer8Channel3(){
 
 }

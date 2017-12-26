@@ -59,7 +59,7 @@
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
-
+ int count =0 ;
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
 
@@ -68,6 +68,7 @@
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
+extern void initialise_monitor_handles(void);
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
@@ -80,13 +81,10 @@ static void MX_GPIO_Init(void);
 
 int main(void)
 {
-
+	  volatile int i = 0;
+	  char *Data = (char*)malloc(sizeof(char) * 256);
   /* USER CODE BEGIN 1 */
-	volatile int count;
 	initialise_monitor_handles();
-	#define	ARR1		125
-	#define ARR2		12
-	uint16_t	timerWaveForm[]= {ARR1,ARR2,ARR1,ARR2,ARR1+2};
   /* USER CODE END 1 */
 
   /* MCU Configuration----------------------------------------------------------*/
@@ -138,9 +136,8 @@ int main(void)
  //  gpioConfigAltFuncNum(GpioA,8,ALT_FUNC0);
   // rccSelectMco1Src(MCO_HSE_SRC);
   // rccSetMco1Prescaler(MCO_DIV_5);
-   enableDma(DMA2_DEV);
+
   // gpioConfig(GpioB,6, GPIO_MODE_AF , GPIO_PUSH_PULL,GPIO_NO_PULL,GPIO_LOW_SPEED);
-   dmaIntiForTimer8();
 
  // nvicEnableIrq(80);
  // nvicSetPriority(80,4);
@@ -171,14 +168,12 @@ int main(void)
  // risingEnable(0);
 
  // eventMaskEnable(0);
-   //initTimer8();
-   initTimer8_OC();
+   initTimer8();
    SetTimer8C1ToOC();
-   dmaSetAddressAndSize(timerWaveForm,&(timer8->CCR1),sizeof(timerWaveForm));
    //flashEraseSector(13);
   //flashEnableProgramming(FLASH_WORD_SIZE);
   //flashWriteMessage("hello world",(char *)0x08084000);
-
+   //enableDma(DMA2_DEV);
    // dmaIntiForUsart1();
 
    gpioConfig(GpioA,9, GPIO_MODE_AF , GPIO_PUSH_PULL,GPIO_NO_PULL,GPIO_VHIGH_SPEED);
@@ -212,7 +207,7 @@ int main(void)
   }
 
 */
-   sendBitPattern(100);
+
 
   /* USER CODE END 2 */
 
@@ -222,9 +217,69 @@ int main(void)
   while (1)
   {
   /* USER CODE END WHILE */
-	//  forceOutCompareChannel1Low();
-	 // forceOutCompareChannel1High();
-	  togglemode();
+	  forceOutCompareChannel1High();
+	    forceOutCompareChannel1Low();
+/*	  ReceiveTillEnter(&Data);
+	  if(strcmp("turn on", &Data) == 0){
+		  SET_PIN(GpioG,redLedPin);
+	  	  	  }
+
+	  else if(strcmp("turn off", &Data) == 0){
+		  RESET_PIN(GpioG,redLedPin);
+	  	  	  }
+	  else{
+	  }
+*/
+//	  SendString("YOYO",4);
+	//  writeData('c');
+	//  serialPrint("Data:%s","helo\n");
+	// writeData("h");
+	 // writeData("8");
+
+	 /* writeData("h");
+	  writeData("e");
+	  writeData("l");
+	  writeData("l");
+	  writeData("o");
+	  writeData(" ");
+	  writeData("w");
+	  writeData("o");
+	  writeData("r");
+	  writeData("l");
+	  writeData("d");
+	  writeData("\n");*/
+	 // HAL_Delay(1000);
+
+
+//	  int num = getRandomNumber();
+//  printf("(%d) 0x%x\n",i++,num);
+	//  volatile uint32_t flag =1;
+/*
+	  SET_PIN(GpioG,redLedPin);
+	  while(!sysTickHasExpired());
+	  RESET_PIN(GpioG,redLedPin);
+	  while(!sysTickHasExpired());
+*/
+/*
+	  RESET_PIN(GpioG,redLedPin);
+	  SET_PIN(GpioG,greenLedPin);
+	  wait500ms();
+	  RESET_PIN(GpioG,greenLedPin);
+	  SET_PIN(GpioG,redLedPin);
+	  wait500ms();
+*/
+/*
+	  volatile int blueButtonState;
+	  SET_PIN(GpioG,redLedPin);
+	  HAL_Delay(200);
+	  RESET_PIN(GpioG,redLedPin);
+	  HAL_Delay(200);
+
+	  gpioLock(GpioG,redLedPin);
+	  gpioConfig(GpioG,redLedPin, GPIO_MODE_IN , GPIO_PUSH_PULL,GPIO_NO_PULL,GPIO_LOW_SPEED);
+
+	  blueButtonState = gpioRead(GpioA,blueButtonPin);
+*/
   /* USER CODE BEGIN 3 */
 
   }
@@ -275,7 +330,7 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV4;
+  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
 
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5) != HAL_OK)
   {
@@ -314,7 +369,6 @@ static void MX_GPIO_Init(void)
 
 void EXTI0_IRQHandler(void){
 
-	int count ;
 	clearPending(0);
 	SET_PIN(GpioG,redLedPin);
 	count++;

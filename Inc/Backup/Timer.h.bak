@@ -45,7 +45,7 @@ struct TimerReg{
 
 #define FORCE_LOW			(4<<4)
 #define FORCE_HIGH			(5<<4)
-#define TOGGLE				(3<<4)
+#define FROZE				(0<<4)
 
 #define OUTPUT_ENABLE			1
 
@@ -57,9 +57,5 @@ void initTimer8(void);
 void SetTimer8C1ToOC();
 void forceOutCompareChannel1High();
 void forceOutCompareChannel1Low();
-void initTimer8_OC(void);
-void toggleOutCompareChannel1WithForce();
-void sendBitPattern(uint8_t data);
-void initTimer8forDma();
 
 #endif /* TIMER_H_ */
