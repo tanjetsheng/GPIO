@@ -50,6 +50,7 @@
 #include "Flash.h"
 #include "Usart.h"
 #include "Dma.h"
+#include "Adc.h"
 
 /* USER CODE BEGIN Includes */
 #define blueButtonPin 0
@@ -180,6 +181,8 @@ int main(void)
   //flashWriteMessage("hello world",(char *)0x08084000);
 
    // dmaIntiForUsart1();
+   enableAdc();
+   initAdc();
 
    gpioConfig(GpioA,9, GPIO_MODE_AF , GPIO_PUSH_PULL,GPIO_NO_PULL,GPIO_VHIGH_SPEED);
    gpioConfigAltFuncNum(GpioA,9,ALT_FUNC7);
@@ -224,7 +227,8 @@ int main(void)
   /* USER CODE END WHILE */
 	//  forceOutCompareChannel1Low();
 	 // forceOutCompareChannel1High();
-	  togglemode();
+	  getDataAdc();
+	 // togglemode();
   /* USER CODE BEGIN 3 */
 
   }

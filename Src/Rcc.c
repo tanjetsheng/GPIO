@@ -64,3 +64,7 @@ void enableDma(int dmaNumber){
 	Rcc->AHB1ENR |= 1<<21 + dmaNumber;
 }
 
+void enableAdc(void){
+	Rcc->AHB2RSTR &= ~(1<<8);
+	Rcc->APB2ENR |= 1<<8;
+}

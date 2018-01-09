@@ -95,5 +95,6 @@ void enableGpioC(void);
 
 
 void enableRng(void);
+void enableAdc(void);
 
 #endif /* RCC_H_ */
