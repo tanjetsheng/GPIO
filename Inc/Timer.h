@@ -62,4 +62,6 @@ void toggleOutCompareChannel1WithForce();
 void sendBitPattern(uint8_t data);
 void initTimer8forDma();
 
+void waittime(int value);
+
 #endif /* TIMER_H_ */

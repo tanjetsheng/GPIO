@@ -39,6 +39,7 @@
 #include "main.h"
 #include "stm32f4xx_hal.h"
 #include <stdio.h>
+#include "Wdg.h"
 #include "Gpio.h"
 #include "Rcc.h"
 #include "Rng.h"
@@ -69,6 +70,8 @@
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
+void printCauseOfReset(void);
+extern void initialise_monitor_handles(void);
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
@@ -139,9 +142,9 @@ int main(void)
  //  gpioConfigAltFuncNum(GpioA,8,ALT_FUNC0);
   // rccSelectMco1Src(MCO_HSE_SRC);
   // rccSetMco1Prescaler(MCO_DIV_5);
-   enableDma(DMA2_DEV);
+   //enableDma(DMA2_DEV);
   // gpioConfig(GpioB,6, GPIO_MODE_AF , GPIO_PUSH_PULL,GPIO_NO_PULL,GPIO_LOW_SPEED);
-   dmaIntiForTimer8();
+   //dmaIntiForTimer8();
 
  // nvicEnableIrq(80);
  // nvicSetPriority(80,4);
@@ -173,16 +176,16 @@ int main(void)
 
  // eventMaskEnable(0);
    //initTimer8();
-   initTimer8_OC();
-   SetTimer8C1ToOC();
-   dmaSetAddressAndSize(timerWaveForm,&(timer8->CCR1),sizeof(timerWaveForm));
+  // initTimer8_OC();
+   //SetTimer8C1ToOC();
+   //dmaSetAddressAndSize(timerWaveForm,&(timer8->CCR1),sizeof(timerWaveForm));
    //flashEraseSector(13);
   //flashEnableProgramming(FLASH_WORD_SIZE);
   //flashWriteMessage("hello world",(char *)0x08084000);
 
    // dmaIntiForUsart1();
-   enableAdc();
-   initAdc();
+  // enableAdc();
+   //initAdc();
 
    gpioConfig(GpioA,9, GPIO_MODE_AF , GPIO_PUSH_PULL,GPIO_NO_PULL,GPIO_VHIGH_SPEED);
    gpioConfigAltFuncNum(GpioA,9,ALT_FUNC7);
@@ -191,7 +194,30 @@ int main(void)
    gpioConfig(GpioC,6, GPIO_MODE_AF , GPIO_PUSH_PULL,GPIO_NO_PULL,GPIO_VHIGH_SPEED);
    gpioConfigAltFuncNum(GpioC,6,ALT_FUNC3);
 
+   enableWwdg();
 
+   printCauseOfReset();
+   for(int i=0;i<20;i++){
+
+	   gpioWrite(GpioG,redLedPin,1);
+	  	  HAL_Delay(50);
+	  	  gpioWrite(GpioG,redLedPin,0);
+	  	  HAL_Delay(50);
+
+
+   }
+   setDivider(DIVIDE_2);
+   	  	initWwdg(30);
+   	  	set(63);
+while(1){
+	HAL_Delay(10);
+	set(28);
+}
+RCC_CLEAR_RESET();
+
+
+   // initIwdg(2000);
+  //  Idwg_reset();
 
    //enableUsart();
    //initUsart();
@@ -215,7 +241,7 @@ int main(void)
   }
 
 */
-   sendBitPattern(100);
+  // sendBitPattern(100);
 
   /* USER CODE END 2 */
 
@@ -227,8 +253,13 @@ int main(void)
   /* USER CODE END WHILE */
 	//  forceOutCompareChannel1Low();
 	 // forceOutCompareChannel1High();
-	  getDataAdc();
+	 // getDataAdc();
 	 // togglemode();
+	/*  gpioWrite(GpioG,redLedPin,1);
+	  HAL_Delay(50);
+	  gpioWrite(GpioG,redLedPin,0);
+	  HAL_Delay(50);
+*/
   /* USER CODE BEGIN 3 */
 
   }
@@ -361,6 +392,36 @@ void _Error_Handler(char * file, int line)
   {
   }
   /* USER CODE END Error_Handler_Debug */ 
+}
+
+//print cause of reset
+void printCauseOfReset(void){
+	if(Rcc->CSR & LOW_POWER_RESET){
+		printf("low power reset\n");
+	}
+	if(Rcc->CSR & WWDD_RESET){
+			printf("window watch dog reset\n");
+		}
+	if(Rcc->CSR & IWDG_RESET){
+				printf("independent watch dog reset\n");
+			}
+	if(Rcc->CSR & SFT_RESET){
+					printf("software reset\n");
+				}
+	if(Rcc->CSR & PORR_RESET){
+					printf("power on /off reset\n");
+				}
+	if(Rcc->CSR & PIN_RESET){
+					printf("pin reset\n");
+				}
+	if(Rcc->CSR & BORR_RESET){
+					printf("brown out reset\n");
+				}
+
+	/*else{
+		printf("no reset\n");
+	}*/
+
 }
 
 #ifdef USE_FULL_ASSERT

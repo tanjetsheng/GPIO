@@ -32,7 +32,7 @@ void getDataAdc(void){
 	adc1->SR &= ~(1<<26);
 	adc1->CR2 |= SWSTART;
 }
-}
+
 
 
 void configAdc(void){

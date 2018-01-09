@@ -68,3 +68,8 @@ void enableAdc(void){
 	Rcc->AHB2RSTR &= ~(1<<8);
 	Rcc->APB2ENR |= 1<<8;
 }
+
+void enableWwdg(void){
+	Rcc->APB1RSTR &= ~(1<<11);
+	Rcc->APB1ENR |= 1<<11;
+}

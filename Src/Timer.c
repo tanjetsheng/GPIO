@@ -73,11 +73,12 @@ void initTimer8forDma(){
 		timer8->CNT = (timer8->ARR) - 1;
 }
 
-void sendBitPattern(uint8_t data){
 
 
+void waittime(int value){
+	for(int i= 0;i<value;i++){
 
-
+	}
 }
 
 

@@ -92,7 +92,17 @@ void enableGpioC(void);
 
 #define rccSetMco1Prescaler(x)		Rcc->CFGR &= ~(7 << 24);	\
 									Rcc->CFGR |= (x << 24);
+//CSR
+#define LOW_POWER_RESET			(1<<31)
+#define WWDD_RESET			(1<<30)
+#define IWDG_RESET			(1<<29)
+#define SFT_RESET			(1<<28)
+#define PORR_RESET			(1<<27)
+#define PIN_RESET			(1<<26)
+#define BORR_RESET			(1<<25)
+#define RMV_RESET			(1<<24)
 
+#define RCC_CLEAR_RESET()			(Rcc->CSR |=RMV_RESET)
 
 void enableRng(void);
 void enableAdc(void);
